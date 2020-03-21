@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <!-- django 3
+  python 3.8 -->
+  <title>Tweeter</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- bootstrap4 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- css -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'tweeterapp/tweeter.css' %}">
+</head>
+<style>
+</style>
+<body>
+  <div class="post">
+    <h1>Welcome to Tweeter App, {{ posts.0.user_name }}</h1>
+  </div>
+  <br />
+
+  <!-- create post modal -->
+  <div id="createPost" class="modal fade" role="dialog">
+    <div class="modal-dialog post">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header post">
+          <h4 style="text-transform: capitalize; color:gold;" class="modal-title">Create Post</h4>
+        </div>
+        <div class="modal-body post">
+          <form action="{% url 'post' %}" method="post">
+            {% csrf_token %}
+            <!-- <label>username:</label>
+            <input type="text" name="username"><br><br> -->
+            <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+            <!-- <label>password:</label>
+            <input type="password" name="password"><br><br> -->
+            <p>Picture URL:</p>
+            <input type="text" name="url"><br><br>
+            <p>Caption:</p>
+            <input type="text" name="caption"><br><br>
+            <input type="submit" style="background:blue" value="Post">
+          </form>
+        </div>
+        <div class="modal-footer post">
+          <button type="button" class="btn btn-default" style="background:red" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- logout button -->
+  <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Logout" style="background:red" class="fixed-bottom">
+  </form>
+
+  <div class="row">
+    <div class="col-4">
+      <!-- user's post -->
+      <div class="post">
+        <div class="usernameHeader" style="text-transform: capitalize;">You ({{posts.0.user_name}})</div>
+        <img src= "{{ posts.0.post_picture_url }}" alt="Picture URL Error"></img>
+        <p>{{ posts.0.post_caption }}</p>
+        <p>Likes: {{ posts.0.likes }}</p>
+        <p>Post date: {{ posts.0.post_date }}</p>
+        <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{posts.0.user_name}}">View More</button>
+        <!-- post button -->
+        <button type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#createPost">Create Post</button>
+      </div>
+
+      <!-- Modal for all of the user's posts-->
+      <div id="viewMore{{posts.0.user_name}}" class="modal fade" role="dialog">
+        <div class="modal-dialog post">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 style="text-transform: capitalize; color:gold;" class="modal-title">{{posts.0.user_name}}'s Posts</h4>
+            </div>
+            <div class="modal-body">
+              {% for post in posts %}
+                <div class="post">
+                  <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+                  <p>{{ post.post_caption }}</p>
+                  <p>Likes: {{ post.likes }}</p>
+                  <p>Post date: {{ post.post_date }}</p>
+                  <form action="{% url 'deletePost' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="userName" value="{{ posts.0.user_name }}">
+                    <input type="hidden" name="postId" value="{{ post.id }}">
+                    <input type="submit" value="Delete Post" style="background:red">
+                  </form>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- shows posts of followed users -->
+    {% for postGroup in allFollowedUserPosts %}
+      <div class="col-4">
+        <div class="post">
+          <div class="usernameHeader" style="text-transform: capitalize;">{{postGroup.0.user_name}}</div>
+          <img src= "{{ postGroup.0.post_picture_url }}" alt="Picture URL Error"></img>
+          <p>{{ postGroup.0.post_caption }}</p>
+          <p>Likes: {{ postGroup.0.likes }}</p>
+          <p>Post date: {{ postGroup.0.post_date }}</p>
+          <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{postGroup.0.user_name}}">View More</button>
+        </div>
+      </div>
+    {% endfor %}
+
+    <!-- creates modals for the posts for the followed users -->
+    {% for postGroup in allFollowedUserPosts %}
+      <!-- Modal -->
+      <div id="viewMore{{postGroup.0.user_name}}" class="modal fade" role="dialog">
+        <div class="modal-dialog post">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 style="text-transform: capitalize; color:gold;" class="modal-title">More Posts</h4>
+            </div>
+            <div class="modal-body">
+              {% for post in postGroup %}
+                <div class="post">
+                  <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+                  <p>{{ post.post_caption }}</p>
+                  <p>Likes: {{ post.likes }}</p>
+                  <p>Post date: {{ post.post_date }}</p>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- {% for userIndex in numberOfFollowedUsers %}
+    <p>{{userIndex}}</p>
+    <div class="usernameHeader">{{ followedUsers.userIndex.user_name }}</div>
+    {% for post in followedUserPosts.userIndex %}
+      <div class="post">
+        <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+        <p>{{ post.post_caption }}</p>
+        <p>Likes: {{ post.likes }}</p>
+        <p>Post date: {{ post.post_date }}</p>
+      </div>
+    {% endfor %}
+  {% endfor %} -->
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+body {
+  text-align: center;
+  background-color: powderblue;
+  font-family: Comic Sans Ms;
+  font-size: 28px;
+  color: #ffffff;
+}
+div.usernameHeader {
+  color: gold;
+  font-size: 45px;
+  text-shadow: 3px 2px white;
+  /* padding-bottom:15%; */
+}
+div.post {
+  /* margin-top:50px; */
+  border: 10px solid gold;
+  background-color: powderblue;
+  outline-width: 8px;
+  outline-color: white;
+  outline-style: double;
+  /* height: 90%; */
+  /* display: inline-block; */
+  /* padding-bottom:50px; */
+}
+img {
+  width:40%;
+  height:40%;
+  /* margin-top:-20%; */
+}
+div.topRight {
+  position: fixed;
+  width: 300px;
+  top: 0;
+  right: 0;
+}
+.spcBot {
+  /* margin-bottom:100px; */
+}
+.p {
+  margin:10px;
+}
