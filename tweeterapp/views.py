@@ -25,6 +25,11 @@ def authentication(request):
     username=request.POST['username']
     password=request.POST['password']
     user = User.objects.filter(user_name=username)
+
+    # admin must log in through the real admin login
+    if username == "poster":
+        return HttpResponseRedirect('/tweeterapp/admin')
+
     if len(user) != 0:
         print(user[0])
         secretChar = user[0].secretChar
@@ -66,7 +71,9 @@ def authentication(request):
 
 def createContext(username):
     #get the user and then its posts and followed users
+    username=username.strip().lower()
     thisThisUser = User.objects.filter(user_name=username)[0]
+    # print(thisThisUser)
 
     # postIds = thisThisUser.getPostIds()
     followedUsersRaw = thisThisUser.getFollowedUsers()
@@ -93,19 +100,23 @@ def createContext(username):
         newPost = Post(user_name=thisThisUser.user_name,user_id=thisThisUser.id,post_picture_url=defaultPicUrl,post_caption="Default")
         newPost.save()
         thisPosts.append(newPost)
-
+    # print("middle")
     #creates list of user objects of folloowed users
     followedUsers = []
     # followedUser = []
     followedUsersList = getIntsFromString(followedUsersRaw)
+    # print("here after middle")
+    # print(followedUsersList)
     for objIndex in followedUsersList:
+        # print("in this")
         thisUser = get_object_or_404(User, pk=objIndex)
+        # print("after in this")
         # followedUser.append(thisUser.getUserName)
         # followedUser.append(thisUser.getPostIds)
         # followedUsers.append(followedUser)
         # followedUser = []
         followedUsers.append(thisUser)
-
+    # print("a little more")
     #creates list of list of followed user's posts objects
     allFollowedUserPosts = []
     followedUserPosts = []
@@ -152,7 +163,7 @@ def createContext(username):
         # "numberOfFollowedUsers":followedUsersListRange,
         # "test":postIds,
     }
-
+    # print("finished making context")
     return context
 
 def addPost(request):
@@ -212,11 +223,109 @@ def newUser(request):
     #real website
     return render(request, 'tweeterapp/userPage.html', context)
 
+def followUser(request):
+    print(request.POST)
+    username = request.POST['username']
+    user = User.objects.filter(user_name=username)[0]
+    followerRequest = request.POST['followerRequest']
+    followerRequest=followerRequest.lower().strip()
+    tryFollow = User.objects.filter(user_name=followerRequest)
+    if len(tryFollow) != 0:
+        if str(tryFollow[0].id) not in user.followed_users:
+            userId = str(tryFollow[0].id)
+            user.followed_users += ",%s," % userId
+            user.save()
+    print("here")
+    #gets all the information of the user and its followed users for context
+    print(username)
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
+def unfollowUser(request):
+    print(request.POST)
+    username = request.POST['username']
+    confirm = request.POST['confirm']
+    user = User.objects.filter(user_name=username)[0]
+    unfollowId = str(request.POST['userId'])
+    intList = []
+    tempStore = ""
+    print(unfollowId)
+    print("^id")
+    print(confirm)
+    if confirm == "CONFIRM":
+        print("here")
+        for char in user.followed_users:
+            if char != " " and char != ",":
+                tempStore += char
+            else:
+                if tempStore != "" and tempStore != "," and tempStore != '':
+                    print(tempStore)
+                    if tempStore not in intList and tempStore != unfollowId:
+                        print(tempStore)
+                        intList.append(int(tempStore))
+                tempStore = ""
+
+        followedUsers = ""
+        for item in intList:
+            followedUsers+=str(item) + ","
+
+        user.followed_users = followedUsers
+        user.save()
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
+def deleteAccount(request):
+    username = request.POST['username']
+    confirm = request.POST['confirm']
+    if confirm == "CONFIRM":
+        user = User.objects.filter(user_name=username)[0]
+        user.delete()
+
+        return render(request, 'tweeterapp/login.html', {})
+
+    else:
+        #gets all the information of the user and its followed users for context
+        context = createContext(username)
+        #real website
+        return render(request, 'tweeterapp/userPage.html', context)
+
+def editPost(request):
+    username = request.POST['username']
+    postId = request.POST['postId']
+    newURL = request.POST['url']
+    newCaption = request.POST['caption']
+
+    post = Post.objects.filter(id=postId)[0]
+
+    if post.post_caption != newCaption or post.post_picture_url != newURL:
+        if "(edited)" not in newCaption:
+            newCaption += " (edited)"
+
+    post.post_caption = newCaption
+    post.post_picture_url = newURL
+    post.save()
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
 def getIntsFromString(string):
     #converts string of ints separated by commas into a list of ints
     intList = []
+    tempStore = ""
     for char in string:
         if char != " " and char != ",":
-            intList.append(int(char))
+            tempStore += char
+        else:
+            if tempStore != "" and tempStore != "," and tempStore != '':
+                if tempStore not in intList:
+                    print(tempStore)
+                    intList.append(int(tempStore))
+            tempStore = ""
 
     return intList

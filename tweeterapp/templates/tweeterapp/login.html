@@ -16,54 +16,58 @@
   <link rel="stylesheet" type="text/css" href="{% static 'tweeterapp/tweeter.css' %}">
 </head>
   <body>
-    <div class="post">
-      <h1>Tweeter App</h1>
-    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div class="post">
+          <h1>Tweeter App</h1>
+          <h4>by bickolas liu</h4>
+        </div>
 
-    <br />
+        <!-- login -->
+        <div class="post" style="margin-top:30px;">
+          <form action="{% url 'authentication' %}" method="post" style="margin-top:10px;">
+          {% csrf_token %}
+            <label>username:</label>
+            <input type="text" name="username"><br><br>
+            <label>password:</label>
+            <input type="password" name="password"><br><br>
+            <!-- goes to authentication in views -->
+            <button type="submit" class="btn btn-info btn-lg spcBot" style="margin-bottom:10px;margin-top:-15px;">Login</button>
+          </form>
+        </div>
 
-    <div class="post">
-      <form action="{% url 'authentication' %}" method="post">
-      {% csrf_token %}
-        <br />
-        <label>username:</label>
-        <input type="text" name="username"><br><br>
-        <label>password:</label>
-        <input type="password" name="password"><br><br>
-        <!-- goes to authentication in views -->
-        <input type="submit" class="btn-info" value="Login">
-      </form>
-    </div>
+        <!-- new user -->
+        <button type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#createUser" style="margin-top:20px;">Create New User</button>
 
-    <br />
-    <button type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#createUser">Create New User</button>
-
-    <!-- create user modal -->
-    <div id="createUser" class="modal fade" role="dialog">
-      <div class="modal-dialog post">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header post">
-            <h4 style="text-transform: capitalize; color:gold;" class="modal-title">Create User</h4>
-          </div>
-          <div class="modal-body post">
-            <form action="{% url 'newUser' %}" method="post">
-            {% csrf_token %}
-              <label>Username:</label>
-              <input type="text" name="username"><br><br>
-              <label>password:</label>
-              <input type="password" name="password"><br><br>
-              <label>type password again:</label>
-              <input type="password" name="password2"><br><br>
-              <input type="submit" style="background:blue" value="Create">
-            </form>
-          </div>
-          <div class="modal-footer post">
-            <button type="button" class="btn btn-default" style="background:red" data-dismiss="modal">Close</button>
+        <!-- create user modal -->
+        <div id="createUser" class="modal fade" role="dialog">
+          <div class="modal-dialog post">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header post">
+                <h4 style="text-transform: capitalize; color:white;" class="modal-title">Create User</h4>
+              </div>
+              <div class="modal-body post">
+                <form action="{% url 'newUser' %}" method="post">
+                {% csrf_token %}
+                  <label>username:</label>
+                  <input type="text" name="username"><br><br>
+                  <label>password:</label>
+                  <input type="password" name="password"><br><br>
+                  <label>type password again:</label>
+                  <input type="password" name="password2"><br><br>
+                  <button type="submit" class="btn btn-info btn-lg spcBot">Create</button>
+                </form>
+              </div>
+              <div class="modal-footer post">
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div class="col-3"></div>
     </div>
-
   </body>
 </html>

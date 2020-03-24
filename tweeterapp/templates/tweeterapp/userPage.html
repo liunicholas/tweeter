@@ -17,150 +17,303 @@
 </head>
 <style>
 </style>
+<script>
+  function unfollowId() {
+    giveId = document.getElementById("giveId");
+    var userId = giveId.value;
+    recieveId = document.getElementById("recieveId");
+    recieveId.value=userId
+  }
+  function editPostId() {
+    giveId = document.getElementById("giveIdPost");
+    var postId = giveId.value;
+    recieveIdPost = document.getElementById("recieveIdPost");
+    recieveIdPost.value=postId
+  }
+</script>
 <body>
-  <div class="post">
-    <h1>Welcome to Tweeter App, {{ posts.0.user_name }}</h1>
-  </div>
-  <br />
-
-  <!-- create post modal -->
-  <div id="createPost" class="modal fade" role="dialog">
-    <div class="modal-dialog post">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header post">
-          <h4 style="text-transform: capitalize; color:gold;" class="modal-title">Create Post</h4>
-        </div>
-        <div class="modal-body post">
-          <form action="{% url 'post' %}" method="post">
+  <div style="margin-left:1.5%;margin-right:1.5%;margin-top:0.5%;">
+    <nav class="navbar navbar-expand-md" style="background:powderblue;position:fixed; width:100%; height:50px;">
+      <div class="post">
+        <!-- title -->
+        <h1 style="text-transform:capitalize;padding-left:5px;padding-right:5px;">Welcome to Tweeter App, {{ posts.0.user_name }} </h1>
+      </div>
+      <ul class="navbar-nav ml-auto">
+        <li>
+          <!-- post button -->
+          <button style="margin-right:5px" type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#createPost">Create Post</button>
+        </li>
+        <li>
+          <!-- follow user button -->
+          <button style="margin-right:5px" type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#followUser">Request to Follow</button>
+        </li>
+        <li>
+          <!-- logout button -->
+          <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <!-- <label>username:</label>
-            <input type="text" name="username"><br><br> -->
-            <input type="hidden" name="username" value="{{ posts.0.user_name }}">
-            <!-- <label>password:</label>
-            <input type="password" name="password"><br><br> -->
-            <p>Picture URL:</p>
-            <input type="text" name="url"><br><br>
-            <p>Caption:</p>
-            <input type="text" name="caption"><br><br>
-            <input type="submit" style="background:blue" value="Post">
+            <button style="margin-right:5px;" type="submit" class="btn btn-danger btn-lg spcBot">Logout</button>
           </form>
-        </div>
-        <div class="modal-footer post">
-          <button type="button" class="btn btn-default" style="background:red" data-dismiss="modal">Close</button>
-        </div>
-      </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- some spacing for the navbar -->
+    <div style="height:90px;">
     </div>
-  </div>
 
-  <!-- logout button -->
-  <form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Logout" style="background:red" class="fixed-bottom">
-  </form>
+    <!-- <div class="post">
+      <h1 style="text-transform: capitalize;">Welcome to Tweeter App, {{ posts.0.user_name }}</h1>
+    </div> -->
+    <!-- <br /> -->
 
-  <div class="row">
-    <div class="col-4">
-      <!-- user's post -->
-      <div class="post">
-        <div class="usernameHeader" style="text-transform: capitalize;">You ({{posts.0.user_name}})</div>
-        <img src= "{{ posts.0.post_picture_url }}" alt="Picture URL Error"></img>
-        <p>{{ posts.0.post_caption }}</p>
-        <p>Likes: {{ posts.0.likes }}</p>
-        <p>Post date: {{ posts.0.post_date }}</p>
-        <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{posts.0.user_name}}">View More</button>
-        <!-- post button -->
-        <button type="button" class="btn btn-warning btn-lg spcBot" data-toggle="modal" data-target="#createPost">Create Post</button>
-      </div>
-
-      <!-- Modal for all of the user's posts-->
-      <div id="viewMore{{posts.0.user_name}}" class="modal fade" role="dialog">
-        <div class="modal-dialog post">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 style="text-transform: capitalize; color:gold;" class="modal-title">{{posts.0.user_name}}'s Posts</h4>
-            </div>
-            <div class="modal-body">
-              {% for post in posts %}
-                <div class="post">
-                  <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
-                  <p>{{ post.post_caption }}</p>
-                  <p>Likes: {{ post.likes }}</p>
-                  <p>Post date: {{ post.post_date }}</p>
-                  <form action="{% url 'deletePost' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="userName" value="{{ posts.0.user_name }}">
-                    <input type="hidden" name="postId" value="{{ post.id }}">
-                    <input type="submit" value="Delete Post" style="background:red">
-                  </form>
-                </div>
-              {% endfor %}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+    <!-- create post modal -->
+    <div id="createPost" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Create Post</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'post' %}" method="post">
+              {% csrf_token %}
+              <!-- <label>username:</label>
+              <input type="text" name="username"><br><br> -->
+              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <!-- <label>password:</label>
+              <input type="password" name="password"><br><br> -->
+              <p>Picture URL:</p>
+              <input type="text" name="url"><br><br>
+              <p>Caption:</p>
+              <input type="text" name="caption"><br><br>
+              <button type="submit" class="btn btn-info btn-lg spcBot">Post</button>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- shows posts of followed users -->
-    {% for postGroup in allFollowedUserPosts %}
+    <!-- edit post modal -->
+    <div id="editPost" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Edit Post</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'editPost' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="postId" id="recieveIdPost">
+              <!-- <input type="text" name="postId" id="recieveIdPost"> -->
+              <p>New Picture URL:</p>
+              <input type="text" name="url"><br><br>
+              <p>New Caption:</p>
+              <input type="text" name="caption"><br><br>
+              <button type="submit" class="btn btn-info btn-lg spcBot">Edit Post</button>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- follow user modal -->
+    <div id="followUser" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Follow a user</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'followUser' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <p>Follow someone:</p>
+              <input type="text" name="followerRequest"><br><br>
+              <button type="submit" class="btn btn-info btn-lg spcBot">Request</button>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- delete account modal -->
+    <div id="deleteAccount" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Delete account</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'deleteAccount' %}" method="post">
+              {% csrf_token %}
+              <!-- <label>username:</label>
+              <input type="text" name="username"><br><br> -->
+              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <!-- <label>password:</label>
+              <input type="password" name="password"><br><br> -->
+              <p>Type "CONFIRM"</p>
+              <input type="text" name="confirm"><br><br>
+              <button type="submit" class="btn btn-danger btn-lg spcBot">Delete</button>
+              <p>I am not facebook or google, your account will be legit deleted if you press delete</p>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- unfollow user modal -->
+    <div id="unfollowUser" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Unfollow</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'unfollowUser' %}" method="post">
+              {% csrf_token %}
+              <!-- <label>username:</label>
+              <input type="text" name="username"><br><br> -->
+              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="userId" id="recieveId">
+              <!-- <label>password:</label>
+              <input type="password" name="password"><br><br> -->
+              <p>Type "CONFIRM"</p>
+              <input type="text" name="confirm"><br><br>
+              <button type="submit" class="btn btn-danger btn-lg spcBot">Unfollow</button>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- display posts of user and followed users -->
+    <div class="row">
+      <!-- user -->
       <div class="col-4">
+        <!-- user's post -->
         <div class="post">
-          <div class="usernameHeader" style="text-transform: capitalize;">{{postGroup.0.user_name}}</div>
-          <img src= "{{ postGroup.0.post_picture_url }}" alt="Picture URL Error"></img>
-          <p>{{ postGroup.0.post_caption }}</p>
-          <p>Likes: {{ postGroup.0.likes }}</p>
-          <p>Post date: {{ postGroup.0.post_date }}</p>
-          <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{postGroup.0.user_name}}">View More</button>
+          <div class="usernameHeader" style="text-transform: capitalize;">You ({{posts.0.user_name}})</div>
+          <img src= "{{ posts.0.post_picture_url }}" alt="Picture URL Error"></img>
+          <p>{{ posts.0.post_caption }}</p>
+          <!-- <p>Likes: {{ posts.0.likes }}</p> -->
+          <p>Post date: {{ posts.0.post_date }}</p>
+          <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{posts.0.user_name}}">View More</button>
+          <button type="button" class="btn btn-danger btn-lg spcBot" data-toggle="modal" data-target="#deleteAccount">Delete Account</button>
         </div>
-      </div>
-    {% endfor %}
-
-    <!-- creates modals for the posts for the followed users -->
-    {% for postGroup in allFollowedUserPosts %}
-      <!-- Modal -->
-      <div id="viewMore{{postGroup.0.user_name}}" class="modal fade" role="dialog">
-        <div class="modal-dialog post">
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 style="text-transform: capitalize; color:gold;" class="modal-title">More Posts</h4>
-            </div>
-            <div class="modal-body">
-              {% for post in postGroup %}
-                <div class="post">
-                  <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
-                  <p>{{ post.post_caption }}</p>
-                  <p>Likes: {{ post.likes }}</p>
-                  <p>Post date: {{ post.post_date }}</p>
-                </div>
-              {% endfor %}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!-- Modal for the rest of the user's posts-->
+        <div id="viewMore{{posts.0.user_name}}" class="modal fade" role="dialog">
+          <div class="modal-dialog post">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header post">
+                <h4 style="text-transform: capitalize; color:white;" class="modal-title">{{posts.0.user_name}}'s Posts</h4>
+              </div>
+              <div class="modal-body">
+                {% for post in posts %}
+                  <div class="post">
+                    <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+                    <p>{{ post.post_caption }}</p>
+                    <!-- <p>Likes: {{ post.likes }}</p> -->
+                    <p>Post date: {{ post.post_date }}</p>
+                    <form action="{% url 'deletePost' %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="userName" value="{{ posts.0.user_name }}">
+                      <input type="hidden" name="postId" value="{{ posts.0.id }}">
+                      <button type="submit" class="btn btn-danger btn-lg spcBot">Delete Post</button>
+                    </form>
+                    <!-- <p>{{ post.id }}</p> -->
+                    <input type="hidden" id="giveIdPost" value="{{ post.id }}">
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#editPost" onclick="editPostId()" data-dismiss="modal">Edit Post</button>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="modal-footer post">
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    {% endfor %}
 
+      <!-- followed users -->
+      {% for postGroup in allFollowedUserPosts %}
+        <!-- uses user's first post as their profile picture -->
+        <div class="col-4">
+          <div class="post">
+            <div class="usernameHeader" style="text-transform: capitalize;">{{postGroup.0.user_name}}</div>
+            <img src= "{{ postGroup.0.post_picture_url }}" alt="Picture URL Error"></img>
+            <p>{{ postGroup.0.post_caption }}</p>
+            <!-- <p>Likes: {{ postGroup.0.likes }}</p> -->
+            <p>Post date: {{ postGroup.0.post_date }}</p>
+            <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{postGroup.0.user_name}}">View More</button>
+            <button type="button" class="btn btn-danger btn-lg spcBot" data-toggle="modal" data-target="#unfollowUser" onclick="unfollowId()">Unfollow</button>
+            <input type="hidden" id="giveId" value="{{ postGroup.0.user_id }}">
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- creates modals for the rest of the posts for the followed users -->
+      {% for postGroup in allFollowedUserPosts %}
+        <!-- Modal -->
+        <div id="viewMore{{postGroup.0.user_name}}" class="modal fade" role="dialog">
+          <div class="modal-dialog post">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header post">
+                <h4 style="text-transform: capitalize; color:white;" class="modal-title">More Posts</h4>
+              </div>
+              <div class="modal-body">
+                {% for post in postGroup %}
+                  <div class="post">
+                    <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+                    <p>{{ post.post_caption }}</p>
+                    <!-- <p>Likes: {{ post.likes }}</p> -->
+                    <p>Post date: {{ post.post_date }}</p>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="modal-footer post">
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- {% for userIndex in numberOfFollowedUsers %}
+      <p>{{userIndex}}</p>
+      <div class="usernameHeader">{{ followedUsers.userIndex.user_name }}</div>
+      {% for post in followedUserPosts.userIndex %}
+        <div class="post">
+          <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
+          <p>{{ post.post_caption }}</p>
+          <p>Likes: {{ post.likes }}</p>
+          <p>Post date: {{ post.post_date }}</p>
+        </div>
+      {% endfor %}
+    {% endfor %} -->
   </div>
-
-  <!-- {% for userIndex in numberOfFollowedUsers %}
-    <p>{{userIndex}}</p>
-    <div class="usernameHeader">{{ followedUsers.userIndex.user_name }}</div>
-    {% for post in followedUserPosts.userIndex %}
-      <div class="post">
-        <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>
-        <p>{{ post.post_caption }}</p>
-        <p>Likes: {{ post.likes }}</p>
-        <p>Post date: {{ post.post_date }}</p>
-      </div>
-    {% endfor %}
-  {% endfor %} -->
-
 </body>
 </html>

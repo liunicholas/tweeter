@@ -2,7 +2,9 @@ import random
 import string
 
 def encode(pw):
-    randCharList = list(string.ascii_lowercase) + (list(string.ascii_uppercase))
+    #list of strings to make random
+    strNumList = ["0","1","2","3","4","4","5","6","7","8","9"]
+    randCharList = list(string.ascii_lowercase) + list(string.ascii_uppercase) + strNumList
     #amount of fake letters changes every time
     encodeLength = random.randrange(50,70)
     #letter changes evry time
@@ -46,3 +48,9 @@ def decode(encodedpw, secretChar):
         decodedpw += encodedpw[int(fakeLetters * i - 1)]
 
     return decodedpw
+
+# def main():
+#     a,b = encode("ethaniscute")
+#     print(a)
+#
+# main()

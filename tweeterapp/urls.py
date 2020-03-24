@@ -14,6 +14,10 @@ urlpatterns = [
     path('post/', views.addPost, name='post'),
     path('deletePost/', views.deletePost, name='deletePost'),
     path('newUser/', views.newUser, name='newUser'),
+    path('followUser/', views.followUser, name='followUser'),
+    path('unfollowUser/', views.unfollowUser, name='unfollowUser'),
+    path('deleteAccount/', views.deleteAccount, name='deleteAccount'),
+    path('editPost/', views.editPost, name='editPost'),
 
     # path('<username>/', views.displayPage, name='userpage'),
 ]

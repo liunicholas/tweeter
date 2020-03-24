@@ -7,7 +7,7 @@ from . import badhash
 # Create your models here.
 class User(models.Model):
     user_name = models.CharField(max_length=20)
-    followed_users = models.CharField(max_length=20)
+    followed_users = models.CharField(max_length=20,default=",")
     password = models.TextField(default="")
     secretChar = models.CharField(max_length=10,default="")
 
