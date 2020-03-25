@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.template import loader
 from .models import Post, User
 from django.shortcuts import get_object_or_404, render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from random import *
 from . import badhash
