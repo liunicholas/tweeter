@@ -3,14 +3,14 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from . import badhash
-from django.contrib.auth.models import user
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
-    user_name = models.CharField(max_length=20)
+class MyUser(AbstractUser):
+    # user_name = models.CharField(max_length=20)
     followed_users = models.CharField(max_length=20,default=",")
-    password = models.TextField(default="")
-    secretChar = models.CharField(max_length=10,default="")
+    # password = models.TextField(default="")
+    # secretChar = models.CharField(max_length=10,default="")
 
     # post_ids = models.CharField(max_length=20, default="")
     def getId(self):

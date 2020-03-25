@@ -7,7 +7,7 @@
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import loader
-from .models import Post, User
+from .models import Post, MyUser
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
@@ -24,55 +24,55 @@ def authentication(request):
     #gets the informtion from the login.html
     username=request.POST['username']
     password=request.POST['password']
-    user = User.objects.filter(user_name=username)
+    user = MyUser.objects.filter(user_name=username)
 
+    # admin must log in through the real admin login
+    # if username == "poster":
+    #     return HttpResponseRedirect('/tweeterapp/admin')
+    #
+    # if len(user) != 0:
+    #     print(user[0])
+    #     secretChar = user[0].secretChar
+    #     hashedPw = user[0].password
+    #     realPW = badhash.decode(hashedPw,secretChar)
+    #     print(password)
+    #     print(realPW)
+    #     if realPW == password:
+    #         # gets all the information of the user and its followed users for context
+    #         context = createContext(username)
+    #         #real website
+    #         return render(request, 'tweeterapp/userPage.html', context)
+    #
+    #     else:
+    #         # invalid user, goes back to login
+    #         return HttpResponseRedirect('/tweeterapp/login')
+    #
+    # else:
+    #     # invalid user, goes back to login
+    #     return HttpResponseRedirect('/tweeterapp/login')
+
+
+    user=authenticate(request, username=username, password=password)
     # admin must log in through the real admin login
     if username == "poster":
         return HttpResponseRedirect('/tweeterapp/admin')
 
-    if len(user) != 0:
-        print(user[0])
-        secretChar = user[0].secretChar
-        hashedPw = user[0].password
-        realPW = badhash.decode(hashedPw,secretChar)
-        print(password)
-        print(realPW)
-        if realPW == password:
-            # gets all the information of the user and its followed users for context
-            context = createContext(username)
-            #real website
-            return render(request, 'tweeterapp/userPage.html', context)
-
-        else:
-            # invalid user, goes back to login
-            return HttpResponseRedirect('/tweeterapp/login')
+    # if the username and password corresspond to a real user
+    if user is not None:
+        #gets all the information of the user and its followed users for context
+        context = createContext(username)
+        #real website
+        return render(request, 'tweeterapp/userPage.html', context)
+        #return HttpResponseRedirect('/tweeterapp/' + username + "/")
 
     else:
-        # invalid user, goes back to login
+        #invalid user, goes back to login
         return HttpResponseRedirect('/tweeterapp/login')
-
-
-    #user=authenticate(request, username=username, password=password)
-    #admin must log in through the real admin login
-    # if username == "poster":
-    #     return HttpResponseRedirect('/tweeterapp/admin')
-
-    #if the username and password corresspond to a real user
-    # if user is not None:
-    #     #gets all the information of the user and its followed users for context
-    #     context = createContext(username)
-    #     #real website
-    #     return render(request, 'tweeterapp/userPage.html', context)
-    #     #return HttpResponseRedirect('/tweeterapp/' + username + "/")
-    #
-    # else:
-    #     #invalid user, goes back to login
-    #     return HttpResponseRedirect('/tweeterapp/login')
 
 def createContext(username):
     #get the user and then its posts and followed users
     username=username.strip().lower()
-    thisThisUser = User.objects.filter(user_name=username)[0]
+    thisThisUser = MyUser.objects.filter(user_name=username)[0]
     # print(thisThisUser)
 
     # postIds = thisThisUser.getPostIds()
@@ -175,7 +175,7 @@ def addPost(request):
     url=request.POST['url']
     caption=request.POST['caption']
 
-    thisUser = User.objects.filter(user_name=username)[0]
+    thisUser = MyUser.objects.filter(user_name=username)[0]
     userId = thisUser.getId()
 
     newPost = Post(user_name=username,user_id=userId,post_picture_url=url,post_caption=caption)
@@ -207,7 +207,7 @@ def newUser(request):
     print(request.POST)
     username=request.POST['username']
     username=username.lower().strip()
-    tryUser = User.objects.filter(user_name=username)
+    tryUser = MyUser.objects.filter(user_name=username)
     print(tryUser)
     password=request.POST['password']
     password2=request.POST['password2']
@@ -226,10 +226,10 @@ def newUser(request):
 def followUser(request):
     print(request.POST)
     username = request.POST['username']
-    user = User.objects.filter(user_name=username)[0]
+    user = MyUser.objects.filter(user_name=username)[0]
     followerRequest = request.POST['followerRequest']
     followerRequest=followerRequest.lower().strip()
-    tryFollow = User.objects.filter(user_name=followerRequest)
+    tryFollow = MyMyUser.objects.filter(user_name=followerRequest)
     if len(tryFollow) != 0:
         if str(tryFollow[0].id) not in user.followed_users:
             userId = str(tryFollow[0].id)
@@ -246,7 +246,7 @@ def unfollowUser(request):
     print(request.POST)
     username = request.POST['username']
     confirm = request.POST['confirm']
-    user = User.objects.filter(user_name=username)[0]
+    user = MyUser.objects.filter(user_name=username)[0]
     unfollowId = str(request.POST['userId'])
     intList = []
     tempStore = ""
@@ -282,7 +282,7 @@ def deleteAccount(request):
     username = request.POST['username']
     confirm = request.POST['confirm']
     if confirm == "CONFIRM":
-        user = User.objects.filter(user_name=username)[0]
+        user = MyUser.objects.filter(user_name=username)[0]
         user.delete()
 
         return render(request, 'tweeterapp/login.html', {})
