@@ -217,11 +217,11 @@
           <p>{{ posts.0.post_caption }}</p>
           <!-- <p>Likes: {{ posts.0.likes }}</p> -->
           <p>Post date: {{ posts.0.post_date }}</p>
-          <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{posts.0.user_name}}">View More</button>
+          <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{posts.0.user_id}}">View More</button>
           <button type="button" class="btn btn-danger btn-lg spcBot" data-toggle="modal" data-target="#deleteAccount">Delete Account</button>
         </div>
         <!-- Modal for the rest of the user's posts-->
-        <div id="viewMore{{posts.0.user_name}}" class="modal fade" role="dialog">
+        <div id="viewMore{{posts.0.user_id}}" class="modal fade" role="dialog">
           <div class="modal-dialog post">
             <!-- Modal content-->
             <div class="modal-content">
@@ -265,7 +265,7 @@
             <p>{{ postGroup.0.post_caption }}</p>
             <!-- <p>Likes: {{ postGroup.0.likes }}</p> -->
             <p>Post date: {{ postGroup.0.post_date }}</p>
-            <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{postGroup.0.user_name}}">View More</button>
+            <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewMore{{postGroup.0.user_id}}">View More</button>
             <button type="button" class="btn btn-danger btn-lg spcBot" data-toggle="modal" data-target="#unfollowUser" onclick="unfollowId()">Unfollow</button>
             <input type="hidden" id="giveId" value="{{ postGroup.0.user_id }}">
           </div>
@@ -275,7 +275,7 @@
       <!-- creates modals for the rest of the posts for the followed users -->
       {% for postGroup in allFollowedUserPosts %}
         <!-- Modal -->
-        <div id="viewMore{{postGroup.0.user_name}}" class="modal fade" role="dialog">
+        <div id="viewMore{{postGroup.0.user_id}}" class="modal fade" role="dialog">
           <div class="modal-dialog post">
             <!-- Modal content-->
             <div class="modal-content">
