@@ -36,7 +36,7 @@
     <nav class="navbar navbar-expand-md" style="background:powderblue;position:fixed; width:100%; height:50px;">
       <div class="post">
         <!-- title -->
-        <h1 style="text-transform:capitalize;padding-left:5px;padding-right:5px;">Welcome to Tweeter App, {{ posts.0.user_name }} </h1>
+        <h1 style="text-transform:capitalize;padding-left:5px;padding-right:5px;">Welcome to Tweeter App, {{ posts.0.username }} </h1>
       </div>
       <ul class="navbar-nav ml-auto">
         <li>
@@ -62,7 +62,7 @@
     </div>
 
     <!-- <div class="post">
-      <h1 style="text-transform: capitalize;">Welcome to Tweeter App, {{ posts.0.user_name }}</h1>
+      <h1 style="text-transform: capitalize;">Welcome to Tweeter App, {{ posts.0.username }}</h1>
     </div> -->
     <!-- <br /> -->
 
@@ -79,7 +79,7 @@
               {% csrf_token %}
               <!-- <label>username:</label>
               <input type="text" name="username"><br><br> -->
-              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="username" value="{{ posts.0.username }}">
               <!-- <label>password:</label>
               <input type="password" name="password"><br><br> -->
               <p>Picture URL:</p>
@@ -107,7 +107,7 @@
           <div class="modal-body post">
             <form action="{% url 'editPost' %}" method="post">
               {% csrf_token %}
-              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="username" value="{{ posts.0.username }}">
               <input type="hidden" name="postId" id="recieveIdPost">
               <!-- <input type="text" name="postId" id="recieveIdPost"> -->
               <p>New Picture URL:</p>
@@ -135,7 +135,7 @@
           <div class="modal-body post">
             <form action="{% url 'followUser' %}" method="post">
               {% csrf_token %}
-              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="username" value="{{ posts.0.username }}">
               <p>Follow someone:</p>
               <input type="text" name="followerRequest"><br><br>
               <button type="submit" class="btn btn-info btn-lg spcBot">Request</button>
@@ -161,7 +161,7 @@
               {% csrf_token %}
               <!-- <label>username:</label>
               <input type="text" name="username"><br><br> -->
-              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="username" value="{{ posts.0.username }}">
               <!-- <label>password:</label>
               <input type="password" name="password"><br><br> -->
               <p>Type "CONFIRM"</p>
@@ -190,7 +190,7 @@
               {% csrf_token %}
               <!-- <label>username:</label>
               <input type="text" name="username"><br><br> -->
-              <input type="hidden" name="username" value="{{ posts.0.user_name }}">
+              <input type="hidden" name="username" value="{{ posts.0.username }}">
               <input type="hidden" name="userId" id="recieveId">
               <!-- <label>password:</label>
               <input type="password" name="password"><br><br> -->
@@ -212,7 +212,7 @@
       <div class="col-4">
         <!-- user's post -->
         <div class="post">
-          <div class="usernameHeader" style="text-transform: capitalize;">You ({{posts.0.user_name}})</div>
+          <div class="usernameHeader" style="text-transform: capitalize;">You ({{posts.0.username}})</div>
           <img src= "{{ posts.0.post_picture_url }}" alt="Picture URL Error"></img>
           <p>{{ posts.0.post_caption }}</p>
           <!-- <p>Likes: {{ posts.0.likes }}</p> -->
@@ -226,7 +226,7 @@
             <!-- Modal content-->
             <div class="modal-content">
               <div class="modal-header post">
-                <h4 style="text-transform: capitalize; color:white;" class="modal-title">{{posts.0.user_name}}'s Posts</h4>
+                <h4 style="text-transform: capitalize; color:white;" class="modal-title">{{posts.0.username}}'s Posts</h4>
               </div>
               <div class="modal-body">
                 {% for post in posts %}
@@ -237,7 +237,7 @@
                     <p>Post date: {{ post.post_date }}</p>
                     <form action="{% url 'deletePost' %}" method="post">
                       {% csrf_token %}
-                      <input type="hidden" name="userName" value="{{ posts.0.user_name }}">
+                      <input type="hidden" name="userName" value="{{ posts.0.username }}">
                       <input type="hidden" name="postId" value="{{ posts.0.id }}">
                       <button type="submit" class="btn btn-danger btn-lg spcBot">Delete Post</button>
                     </form>
@@ -260,7 +260,7 @@
         <!-- uses user's first post as their profile picture -->
         <div class="col-4">
           <div class="post">
-            <div class="usernameHeader" style="text-transform: capitalize;">{{postGroup.0.user_name}}</div>
+            <div class="usernameHeader" style="text-transform: capitalize;">{{postGroup.0.username}}</div>
             <img src= "{{ postGroup.0.post_picture_url }}" alt="Picture URL Error"></img>
             <p>{{ postGroup.0.post_caption }}</p>
             <!-- <p>Likes: {{ postGroup.0.likes }}</p> -->
@@ -304,7 +304,7 @@
 
     <!-- {% for userIndex in numberOfFollowedUsers %}
       <p>{{userIndex}}</p>
-      <div class="usernameHeader">{{ followedUsers.userIndex.user_name }}</div>
+      <div class="usernameHeader">{{ followedUsers.userIndex.username }}</div>
       {% for post in followedUserPosts.userIndex %}
         <div class="post">
           <img src= "{{ post.post_picture_url }}" alt="Picture URL Error"></img>

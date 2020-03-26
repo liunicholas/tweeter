@@ -3,13 +3,14 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from . import badhash
+from django.contrib.auth.models import User
 
 # Create your models here.
-class User(models.Model):
-    user_name = models.CharField(max_length=20)
+class MyUser(User):
+    # username = models.CharField(max_length=20)
     followed_users = models.CharField(max_length=20,default=",")
-    password = models.TextField(default="")
-    secretChar = models.CharField(max_length=10,default="")
+    # password = models.TextField(default="")
+    # secretChar = models.CharField(max_length=10,default="")
 
     # post_ids = models.CharField(max_length=20, default="")
     def getId(self):
@@ -17,17 +18,18 @@ class User(models.Model):
     # def getPostIds(self):
     #     return self.post_ids
     def __str__(self):
-        # return str(self.id) + " " + self.user_name + " posts: " + self.post_ids + " followed users: " + self.followed_users
-        return str(self.id) + " " + self.user_name + " followed users: " + self.followed_users + " Pw: " + self.password
+        # return str(self.id) + " " + self.username + " posts: " + self.post_ids + " followed users: " + self.followed_users
+        return str(self.id) + " " + self.username + " followed users: " + self.followed_users + " Pw: " + self.password
     def getFollowedUsers(self):
         return self.followed_users
     def hashPassword(self):
         # print("TESTING")
-        print(self.password)
-        hashedPassword, secretChar = badhash.encode(self.password)
-        self.secretChar = secretChar
-        self.password = hashedPassword
-        self.save()
+        # print(self.password)
+        # hashedPassword, secretChar = badhash.encode(self.password)
+        # self.secretChar = secretChar
+        # self.password = hashedPassword
+        # self.save()
+        print("this function is useless now")
         # print(self.hashedPassword)
 
     # class Meta:
@@ -35,7 +37,7 @@ class User(models.Model):
     #     secretChar = ""
 
 class Post(models.Model):
-    user_name = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
     user_id = models.IntegerField(default=-1)
     post_picture_url = models.TextField(max_length=200)
     post_caption = models.TextField(max_length=144)
@@ -43,13 +45,13 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return "User: " + self.user_name + " " + str(self.user_id) + " Caption: " + self.post_caption
+        return "User: " + self.username + " " + str(self.user_id) + " Caption: " + self.post_caption
     def getId(self):
         return self.id
     def getUserId(self):
         return self.user_id
     def getUserName(self):
-        return self.user_name
+        return self.username
     def getPic(self):
         return self.post_picture_url
     def getCap(self):
