@@ -317,6 +317,48 @@ def editPost(request):
     #real website
     return render(request, 'tweeterapp/userPage.html', context)
 
+def comment():
+    comment = request.POST['comment']
+    postId = request.POST['postId']
+    post = Post.objects.filter(id=postId)[0]
+
+    post.comments += comment + "&%$@*&^$*^$%#$%#"
+    post.save()
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
+def deleteComment():
+    comment = request.POST['comment']
+    postId = request.POST['postId']
+    post = Post.objects.filter(id=postId)[0]
+
+    previouscomments = post.comments
+    commentslist = []
+    index = previouscomments.index("&%$@*&^$*^$%#$%#")
+    while index >= 0:
+        comment = previouscomments[:index]
+        commentsList.append(comment)
+        previouscomments = previouscomments[index+16:]
+        index = previouscomments.index("&%$@*&^$*^$%#$%#")
+
+    index = commentslist.index(comment)
+    commentslist.pop(index)
+
+    newCommentsList = ""
+    for comment in commentsList:
+        newCommentsList += comment + "&%$@*&^$*^$%#$%#"
+
+    post.comments = newCommentsList
+    post.save()
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
 def getIntsFromString(string):
     #converts string of ints separated by commas into a list of ints
     intList = []
