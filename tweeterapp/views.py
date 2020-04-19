@@ -1,7 +1,7 @@
 #django 3
 #python 3.8
 
-#admin un: poster
+#admin un: ethan
 #admin pw: ethan
 
 from django.http import HttpResponse
@@ -56,7 +56,7 @@ def authentication(request):
 
     user=authenticate(request, username=username, password=password)
     # admin must log in through the real admin login
-    if username == "poster":
+    if username == "admin":
         return HttpResponseRedirect('/tweeterapp/admin')
 
     # if the username and password corresspond to a real user

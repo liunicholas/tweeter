@@ -43,8 +43,7 @@ class Post(models.Model):
     post_caption = models.TextField(max_length=144)
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
-    comments = models.ListTextField(base_field=CharField())
-    models.TextField(max_length=200,default=",")
+    comments = models.TextField(max_length=200,default=",")
 
     def __str__(self):
         return "User: " + self.username + " " + str(self.user_id) + " Caption: " + self.post_caption
