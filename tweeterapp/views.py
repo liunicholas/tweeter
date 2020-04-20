@@ -168,6 +168,20 @@ def createContext(username):
     # print("finished making context")
     return context
 
+def addComment(request):
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
+def deleteComment(request):
+
+    #gets all the information of the user and its followed users for context
+    context = createContext(username)
+    #real website
+    return render(request, 'tweeterapp/userPage.html', context)
+
 def addPost(request):
     username=request.POST['username']
     username=username.lower()

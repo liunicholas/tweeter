@@ -63,3 +63,14 @@ class Post(models.Model):
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.post_date <= now
+
+class Comment(models.Model):    
+    comment = models.ForeignKey(
+        Post,
+        on_delete = models.CASCADE,
+        null = True,
+        related_name = 'comment',
+    )
+
+    def __str__(self):
+        return self.comment

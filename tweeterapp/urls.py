@@ -18,6 +18,9 @@ urlpatterns = [
     path('unfollowUser/', views.unfollowUser, name='unfollowUser'),
     path('deleteAccount/', views.deleteAccount, name='deleteAccount'),
     path('editPost/', views.editPost, name='editPost'),
+    path('addComment/', views.addComment, name='addComment'),
+    path('deleteComment/', views.deleteComment, name='deleteComment'),
+
 
     # path('<username>/', views.displayPage, name='userpage'),
 ]
