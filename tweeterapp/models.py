@@ -45,6 +45,8 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     comments = models.TextField(max_length=200,default=",")
 
+    commentsList = []
+
     def __str__(self):
         return "User: " + self.username + " " + str(self.user_id) + " Caption: " + self.post_caption
     def getId(self):
