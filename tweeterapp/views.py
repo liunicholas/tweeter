@@ -359,6 +359,17 @@ def deleteComment():
     #real website
     return render(request, 'tweeterapp/userPage.html', context)
 
+def getCommentsAsList(commentString):
+    commentslist = []
+    index = commentString.index("&%$@*&^$*^$%#$%#")
+    while index >= 0:
+        comment = commentString[:index]
+        commentString.append(comment)
+        commentString = commentString[index+16:]
+        index = commentString.index("&%$@*&^$*^$%#$%#")
+
+    return commentString
+
 def getIntsFromString(string):
     #converts string of ints separated by commas into a list of ints
     intList = []
