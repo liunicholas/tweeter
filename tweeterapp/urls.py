@@ -21,6 +21,5 @@ urlpatterns = [
     path('addComment/', views.addComment, name='addComment'),
     path('deleteComment/', views.deleteComment, name='deleteComment'),
 
-
     # path('<username>/', views.displayPage, name='userpage'),
 ]

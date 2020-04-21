@@ -64,12 +64,13 @@ class Post(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.post_date <= now
 
-class Comment(models.Model):    
-    comment = models.ForeignKey(
-        Post,
+class Comment(models.Model):
+    comment = models.TextField(max_length=200)
+    post = models.ForeignKey(
+        to=Post,
         on_delete = models.CASCADE,
         null = True,
-        related_name = 'comment',
+        related_name = 'post',
     )
 
     def __str__(self):
