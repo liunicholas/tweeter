@@ -20,6 +20,8 @@ urlpatterns = [
     path('editPost/', views.editPost, name='editPost'),
     path('addComment/', views.addComment, name='addComment'),
     path('deleteComment/', views.deleteComment, name='deleteComment'),
+    path('showStockHistory/', views.showStockHistory, name='showStockHistory'),
+    path('showStock/', views.showStock, name='showStock'),
 
     # path('<username>/', views.displayPage, name='userpage'),
 ]

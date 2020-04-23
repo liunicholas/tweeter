@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <!-- django 3
+  python 3.8 -->
+  <title>Tweeter Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- bootstrap4 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- css -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'tweeterapp/tweeter.css' %}">
+</head>
+  <body>
+    <div class="row" style="margin-top:20px;">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <div class="post">
+          <h1>Stock History for {{ stockName }}</h1>
+          <h4>might not be accurate</h4>
+        </div>
+
+        <div class="post" style="margin-top:30px;">
+          <img src= "{{ stockPic }}" alt="Picture URL Error"></img>
+          <div style="height:20px;"></div>
+          <table>
+            <tr>
+              <th>Date</th>
+              <th>Opening Price</th>
+              <th>Closing Price</th>
+            </tr>
+          {% for dataPoint in stockInfo %}
+            <tr>
+              <td>{{ dataPoint.0 }}</td>
+              <td>{{ dataPoint.1 }}</td>
+              <td>{{ dataPoint.2 }}</td>
+            </tr>
+          {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </body>
+</html>
