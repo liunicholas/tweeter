@@ -1,8 +1,8 @@
 #django 3
 #python 3.8
 
-#admin un: ethan
-#admin pw: ethan
+#admin un: admin
+#admin pw: admin
 
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -117,7 +117,7 @@ def createContext(username):
     # print(followedUsersList)
     for objIndex in followedUsersList:
         # print("in this")
-        thisUser = get_object_or_404(User, pk=objIndex)
+        thisUser = get_object_or_404(MyUser, pk=objIndex)
         # print("after in this")
         # followedUser.append(thisUser.getUserName)
         # followedUser.append(thisUser.getPostIds)
@@ -222,6 +222,7 @@ def deletePost(request):
     return render(request, 'tweeterapp/userPage.html', context)
 
 def logout(request):
+    print("logout")
     #once it exits the authnetication url, the session is over
     return HttpResponseRedirect('/tweeterapp/login/')
 
@@ -252,7 +253,7 @@ def followUser(request):
     user = MyUser.objects.filter(username=username)[0]
     followerRequest = request.POST['followerRequest']
     followerRequest=followerRequest.lower().strip()
-    tryFollow = MyMyUser.objects.filter(username=followerRequest)
+    tryFollow = MyUser.objects.filter(username=followerRequest)
     if len(tryFollow) != 0:
         if str(tryFollow[0].id) not in user.followed_users:
             userId = str(tryFollow[0].id)
@@ -751,8 +752,8 @@ def showStockHistory(request):
     for i in range(len(openList)):
         tempList=[]
         tempList.append(str(dateList[i][1])+"/"+str(dateList[i][2])+"/"+str(dateList[i][0]))
-        tempList.append(openList[i])
-        tempList.append(closeList[i])
+        tempList.append(round(openList[i],2))
+        tempList.append(round(closeList[i],2))
         stockInfo.append(tempList)
 
     stock = Ticker(name)
