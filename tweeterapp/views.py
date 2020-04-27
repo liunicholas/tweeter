@@ -15,7 +15,7 @@ from random import *
 from . import badhash
 
 #stuff for stock report
-from tweeterapp.yfinance import *
+from tweeterapp.yaFinLib.yfinance import *
 # from tweeterapp.graphics import *
 from random import *
 import numpy as np
