@@ -66,6 +66,24 @@
             </div>
           </div>
         </div>
+
+        <div class="post" style="margin-top:30px;">
+          <form action="{% url 'showStock' %}" method="post" style="margin-top:10px;">
+          {% csrf_token %}
+            <label>Stock Abbreviation:</label>
+            <input type="text" name="name"><br><br>
+            <!-- goes to showStock in views -->
+            <button type="submit" class="btn btn-info btn-lg spcBot" style="margin-bottom:10px;margin-top:-15px;">Display Stock Info</button>
+          </form>
+          <form action="{% url 'showStockHistory' %}" method="post" style="margin-top:10px;">
+          {% csrf_token %}
+          <label>Stock Abbreviation:</label>
+          <input type="text" name="name"><br><br>
+          <!-- goes to showStockHistory in views -->
+            <button type="submit" class="btn btn-info btn-lg spcBot" style="margin-bottom:10px;margin-top:-15px;">Click this to see stock histories <br>as well as a garbage speculation <br>that you should not follow</button>
+          </form>
+        </div>
+
       </div>
       <div class="col-3"></div>
     </div>
