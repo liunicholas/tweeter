@@ -213,6 +213,14 @@ def addComment(request):
     return render(request, 'tweeterapp/userPage.html', context)
 
 def deleteComment(request):
+    postId=request.POST['postId']
+    commentId =request.POST['commentId']
+
+    post = Post.objects.get(id=postId)
+    comments = Comment.objects.filter(post=post))
+    for comment in comments:
+        if comment.id == commentId:
+            comment.delete()
 
     #gets all the information of the user and its followed users for context
     context = createContext(username)
