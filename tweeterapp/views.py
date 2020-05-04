@@ -7,7 +7,7 @@
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import loader
-from .models import Post, MyUser
+from .models import Post, MyUser, Comment
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
@@ -99,15 +99,28 @@ def createContext(username):
     #     # posts.append(post)
     #     # post = []
     #     thisPosts.append(thisPost)
+
+    #all the comments for every post
+    allComments = []
+    tempComments = []
+    #user posts
     for thisPost in Post.objects.all():
         if thisPost.getUserId() == thisThisUser.getId():
             if thisPost.getPic() != defaultPicUrl:
                 thisPosts.append(thisPost)
+                tempComments.append(thisPost.id)
+                tempComments.append(Comment.objects.filter(post=thisPost))
+                allComments.append(tempComments)
+                tempComments = []
 
     if len(thisPosts) == 0:
         newPost = Post(username=thisThisUser.username,user_id=thisThisUser.id,post_picture_url=defaultPicUrl,post_caption="Default")
         newPost.save()
         thisPosts.append(newPost)
+        tempComments.append(newPost.id)
+        tempComments.append(Comment.objects.filter(post=newPost))
+        allComments.append(tempComments)
+        tempComments = []
     # print("middle")
     #creates list of user objects of folloowed users
     followedUsers = []
@@ -129,6 +142,8 @@ def createContext(username):
     allFollowedUserPosts = []
     followedUserPosts = []
     # followedUserPost = []
+
+    #followed users posts
     for userObject in followedUsers:
         # postList = getIntsFromString(object.getPostIds())
         # for index in postList:
@@ -146,10 +161,19 @@ def createContext(username):
         for thisPost in Post.objects.all():
             if thisPost.getUserId() == userObject.getId():
                 followedUserPosts.append(thisPost)
+                tempComments.append(thisPost.id)
+                tempComments.append(Comment.objects.filter(post=thisPost))
+                allComments.append(tempComments)
+                tempComments = []
         if len(followedUserPosts) == 0:
             newPost = Post(username=userObject.username,user_id=userObject.id,post_picture_url=defaultPicUrl,post_caption="Default")
             newPost.save()
             followedUserPosts.append(newPost)
+            thisPosts.append(newPost)
+            tempComments.append(newPost.id)
+            tempComments.append(Comment.objects.filter(post=newPost))
+            allComments.append(tempComments)
+            tempComments = []
 
         allFollowedUserPosts.append(followedUserPosts)
         followedUserPosts = []
@@ -170,11 +194,18 @@ def createContext(username):
         # "oneFollowedUserPost":topFollowedUserPosts,
         # "numberOfFollowedUsers":followedUsersListRange,
         # "test":postIds,
+        "comments":allComments;
     }
     # print("finished making context")
     return context
 
 def addComment(request):
+    postId=request.POST['postId']
+    commentText =request.POST['comment']
+
+    post = Post.objects.get(id=postId)
+    comment = Comment(comment=commentText,post=post)
+    comment.save()
 
     #gets all the information of the user and its followed users for context
     context = createContext(username)
