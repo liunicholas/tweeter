@@ -294,11 +294,12 @@ def newUser(request):
 def followUser(request):
     print(request.POST)
     username = request.POST['username']
+    username = username.lower().strip()
     user = MyUser.objects.filter(username=username)[0]
     followerRequest = request.POST['followerRequest']
     followerRequest=followerRequest.lower().strip()
     tryFollow = MyUser.objects.filter(username=followerRequest)
-    if len(tryFollow) != 0:
+    if len(tryFollow) != 0 and followerRequest != username:
         if str(tryFollow[0].id) not in user.followed_users:
             userId = str(tryFollow[0].id)
             user.followed_users += ",%s," % userId
