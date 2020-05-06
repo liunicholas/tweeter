@@ -194,7 +194,7 @@ def createContext(username):
         # "oneFollowedUserPost":topFollowedUserPosts,
         # "numberOfFollowedUsers":followedUsersListRange,
         # "test":postIds,
-        "comments":allComments;
+        "comments":allComments,
     }
     # print("finished making context")
     return context
@@ -217,7 +217,7 @@ def deleteComment(request):
     commentId =request.POST['commentId']
 
     post = Post.objects.get(id=postId)
-    comments = Comment.objects.filter(post=post))
+    comments = Comment.objects.filter(post=post)
     for comment in comments:
         if comment.id == commentId:
             comment.delete()
