@@ -200,6 +200,9 @@ def createContext(username):
     return context
 
 def addComment(request):
+    username=request.POST['username']
+    username=username.lower()
+    # print(username)
     postId=request.POST['postId']
     commentText =request.POST['comment']
 
@@ -213,6 +216,8 @@ def addComment(request):
     return render(request, 'tweeterapp/userPage.html', context)
 
 def deleteComment(request):
+    username=request.POST['username']
+    username=username.lower()
     postId=request.POST['postId']
     commentId =request.POST['commentId']
 

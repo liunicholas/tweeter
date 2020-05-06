@@ -24,11 +24,23 @@
     recieveId = document.getElementById("recieveId");
     recieveId.value=userId
   }
+  function giveUsername() {
+    giveName = document.getElementById("giveName");
+    var userName = giveName.value;
+    recieveName = document.getElementById("recieveName");
+    recieveName.value=userName
+  }
   function editPostId() {
     giveId = document.getElementById("giveIdPost");
     var postId = giveId.value;
     recieveIdPost = document.getElementById("recieveIdPost");
     recieveIdPost.value=postId
+  }
+  function addCommentId() {
+    giveId = document.getElementById("givePostCommentId");
+    var postId = giveId.value;
+    recievePostCommentId = document.getElementById("recievePostCommentId");
+    recievePostCommentId.value=postId
   }
 </script>
 <body>
@@ -87,6 +99,31 @@
               <p>Caption:</p>
               <input type="text" name="caption"><br><br>
               <button type="submit" class="btn btn-info btn-lg spcBot">Post</button>
+            </form>
+          </div>
+          <div class="modal-footer post">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- add comment modal -->
+    <div id="addComment" class="modal fade" role="dialog">
+      <div class="modal-dialog post">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header post">
+            <h4 style="text-transform: capitalize; color:white;" class="modal-title">Add Comment</h4>
+          </div>
+          <div class="modal-body post">
+            <form action="{% url 'addComment' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="postId" id="recievePostCommentId">
+              <input type="hidden" name="username" id="recieveName">
+              <p>Comment</p>
+              <input type="text" name="comment"><br><br>
+              <button type="submit" class="btn btn-info btn-lg spcBot">Comment</button>
             </form>
           </div>
           <div class="modal-footer post">
@@ -244,6 +281,9 @@
                     <!-- <p>{{ post.id }}</p> -->
                     <input type="hidden" id="giveIdPost" value="{{ post.id }}">
                     <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#editPost" onclick="editPostId()" data-dismiss="modal">Edit Post</button>
+                    <input type="hidden" id="givePostCommentId" value="{{ post.id }}">
+                    <input type="hidden" id="giveName" value="{{ posts.0.username }}">
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId(); giveUsername();" data-dismiss="modal">Add Comment</button>
                   </div>
                 {% endfor %}
               </div>
@@ -289,6 +329,9 @@
                     <p>{{ post.post_caption }}</p>
                     <!-- <p>Likes: {{ post.likes }}</p> -->
                     <p>Post date: {{ post.post_date }}</p>
+                    <input type="hidden" id="givePostCommentId" value="{{ post.id }}">
+                    <input type="hidden" id="giveName" value="{{ posts.0.username }}">
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId(); giveUsername();" data-dismiss="modal">Add Comment</button>
                   </div>
                 {% endfor %}
               </div>
