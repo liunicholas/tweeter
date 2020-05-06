@@ -284,6 +284,7 @@
                     <input type="hidden" id="givePostCommentId" value="{{ post.id }}">
                     <input type="hidden" id="giveName" value="{{ posts.0.username }}">
                     <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId(); giveUsername();" data-dismiss="modal">Add Comment</button>
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewComments{{post.id}}">Comments</button>
                   </div>
                 {% endfor %}
               </div>
@@ -332,6 +333,32 @@
                     <input type="hidden" id="givePostCommentId" value="{{ post.id }}">
                     <input type="hidden" id="giveName" value="{{ posts.0.username }}">
                     <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId(); giveUsername();" data-dismiss="modal">Add Comment</button>
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewComments{{post.id}}">Comments</button>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="modal-footer post">
+                <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- creates modals for all the comments -->
+      {% for commentGroup in comments %}
+        <!-- Modal -->
+        <div id="viewComments{{commentGroup.0}}" class="modal fade" role="dialog">
+          <div class="modal-dialog post">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header post">
+                <h4 style="text-transform: capitalize; color:white;" class="modal-title">Comments</h4>
+              </div>
+              <div class="modal-body">
+                {% for comment in commentGroup.1 %}
+                  <div class="post">
+                    <p>{{ comment.comment }}</p>
                   </div>
                 {% endfor %}
               </div>

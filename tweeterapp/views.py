@@ -196,6 +196,7 @@ def createContext(username):
         # "test":postIds,
         "comments":allComments,
     }
+    print(allComments)
     # print("finished making context")
     return context
 
