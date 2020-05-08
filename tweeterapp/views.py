@@ -219,14 +219,17 @@ def addComment(request):
 def deleteComment(request):
     username=request.POST['username']
     username=username.lower()
-    postId=request.POST['postId']
+    # postId=request.POST['postId']
     commentId =request.POST['commentId']
 
-    post = Post.objects.get(id=postId)
-    comments = Comment.objects.filter(post=post)
-    for comment in comments:
-        if comment.id == commentId:
-            comment.delete()
+    # post = Post.objects.get(id=postId)
+    # comments = Comment.objects.filter(post=post)
+    # for comment in comments:
+    #     if comment.id == commentId:
+    #         comment.delete()
+
+    comment = Comment.objects.filter(id=commentId)[0]
+    comment.delete()
 
     #gets all the information of the user and its followed users for context
     context = createContext(username)

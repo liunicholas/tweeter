@@ -359,6 +359,13 @@
                 {% for comment in commentGroup.1 %}
                   <div class="post">
                     <p>{{ comment.comment }}</p>
+                    <form action="{% url 'deleteComment' %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="username" value="{{ posts.0.username }}">
+                      <!-- <input type="hidden" name="postId" value="{{ commentGroup.0 }}"> -->
+                      <input type="hidden" name="commentId" value="{{ comment.id }}">
+                      <button type="submit" class="btn btn-danger btn-lg spcBot">Delete Comment</button>
+                    </form>
                   </div>
                 {% endfor %}
               </div>
