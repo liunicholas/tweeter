@@ -34,9 +34,17 @@ for i in range(hist.shape[0]):
 # plt.plot(openList)
 # mpld3.show()
 
-fig = plt.figure()
+# fig = plt.figure()
+# # print(type(fig))
+# plot = plt.plot(openList)
+# fig.add_subplot(plot)
+# fig.show()
+
+fig, ax = plt.subplots()
+ax.plot(openList)
 print(type(fig))
-print(type(plt.plot(openList)))
-mpld3.show()
-graph = fig_to_html()
-context['graph'] = graph
+
+
+# mpld3.show()
+# graph = fig_to_html()
+# context['graph'] = graph

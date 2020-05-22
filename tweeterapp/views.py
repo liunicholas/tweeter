@@ -811,9 +811,14 @@ def showStockHistory(request):
 
     stock = Ticker(name)
     stockInfoKeys=stock.info
+
+    fig, ax = plt.subplots()
+    ax.plot(openList)
+
     context['stockInfo'] = stockInfo
     context['stockPic'] = stockInfoKeys['logo_url']
     context['stockName'] = stockInfoKeys['longName']
+    context['graph'] = mpld3.fig_to_html(fig)
 
     return render(request, 'tweeterapp/stockHistory.html', context)
 
