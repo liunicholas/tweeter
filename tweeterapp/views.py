@@ -378,12 +378,17 @@ def editPost(request):
 
     post = Post.objects.filter(id=postId)[0]
 
-    if post.post_caption != newCaption or post.post_picture_url != newURL:
+    if newCaption != "" and post.post_caption != newCaption:
         if "(edited)" not in newCaption:
+            print("it's not edited yet")
             newCaption += " (edited)"
+        post.post_caption = newCaption
 
-    post.post_caption = newCaption
-    post.post_picture_url = newURL
+    if newURL != "" and post.post_picture_url != newURL:
+        post.post_picture_url = newURL
+        post.post_caption += " (edited)"
+
+
     post.save()
 
     #gets all the information of the user and its followed users for context
