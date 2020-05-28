@@ -164,11 +164,12 @@ def createContext(username):
         # followedUserPosts = []
         for thisPost in Post.objects.all():
             if thisPost.getUserId() == userObject.getId():
-                followedUserPosts.append(thisPost)
-                tempComments.append(thisPost.id)
-                tempComments.append(Comment.objects.filter(post=thisPost))
-                allComments.append(tempComments)
-                tempComments = []
+                if thisPost.getPic() != defaultPicUrl:
+                    followedUserPosts.append(thisPost)
+                    tempComments.append(thisPost.id)
+                    tempComments.append(Comment.objects.filter(post=thisPost))
+                    allComments.append(tempComments)
+                    tempComments = []
         if len(followedUserPosts) == 0:
             newPost = Post(username=userObject.username,user_id=userObject.id,post_picture_url=defaultPicUrl,post_caption="Default")
             newPost.save()
