@@ -820,6 +820,8 @@ def showStockHistory(request):
     context['stockInfo'] = stockInfo
     context['stockPic'] = stockInfoKeys['logo_url']
     context['stockName'] = stockInfoKeys['longName']
+    # context['graph'] = mpld3.fig_to_html(fig)
+    # print(context['graph'])
 
     return render(request, 'tweeterapp/stockHistory.html', context)
 
