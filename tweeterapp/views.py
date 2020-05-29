@@ -110,13 +110,15 @@ def createContext(username):
     #user posts
     for thisPost in Post.objects.all():
         if thisPost.getUserId() == thisThisUser.getId():
-            if thisPost.getPic() != defaultPicUrl:
+            print(thisPost.post_caption)
+            if thisPost.getPic() != defaultPicUrl and thisPost.post_caption != "Default":
                 thisPosts.append(thisPost)
                 tempComments.append(thisPost.id)
                 tempComments.append(Comment.objects.filter(post=thisPost))
                 allComments.append(tempComments)
                 tempComments = []
 
+    print(thisPosts)
     if len(thisPosts) == 0:
         newPost = Post(username=thisThisUser.username,user_id=thisThisUser.id,post_picture_url=defaultPicUrl,post_caption="Default")
         newPost.save()
@@ -125,6 +127,9 @@ def createContext(username):
         tempComments.append(Comment.objects.filter(post=newPost))
         allComments.append(tempComments)
         tempComments = []
+
+    print(thisPosts)
+
     # print("middle")
     #creates list of user objects of folloowed users
     followedUsers = []
@@ -164,7 +169,7 @@ def createContext(username):
         # followedUserPosts = []
         for thisPost in Post.objects.all():
             if thisPost.getUserId() == userObject.getId():
-                if thisPost.getPic() != defaultPicUrl:
+                if thisPost.getPic() != defaultPicUrl and thisPost.post_caption != "Default":
                     followedUserPosts.append(thisPost)
                     tempComments.append(thisPost.id)
                     tempComments.append(Comment.objects.filter(post=thisPost))
@@ -174,7 +179,6 @@ def createContext(username):
             newPost = Post(username=userObject.username,user_id=userObject.id,post_picture_url=defaultPicUrl,post_caption="Default")
             newPost.save()
             followedUserPosts.append(newPost)
-            thisPosts.append(newPost)
             tempComments.append(newPost.id)
             tempComments.append(Comment.objects.filter(post=newPost))
             allComments.append(tempComments)
@@ -201,6 +205,7 @@ def createContext(username):
         # "test":postIds,
         "comments":allComments,
     }
+    print(context['posts'])
     print(allComments)
     # print("finished making context")
     return context
@@ -210,7 +215,7 @@ def addComment(request):
     username=username.lower()
     # print(username)
     postId=request.POST['postId']
-    commentText =request.POST['comment']
+    commentText=request.POST['comment']
 
     post = Post.objects.get(id=postId)
     comment = Comment(comment=commentText,post=post)
@@ -820,8 +825,8 @@ def showStockHistory(request):
     context['stockInfo'] = stockInfo
     context['stockPic'] = stockInfoKeys['logo_url']
     context['stockName'] = stockInfoKeys['longName']
-    # context['graph'] = mpld3.fig_to_html(fig)
-    # print(context['graph'])
+    context['graph'] = mpld3.fig_to_html(fig)
+    print(context['graph'])
 
     return render(request, 'tweeterapp/stockHistory.html', context)
 
