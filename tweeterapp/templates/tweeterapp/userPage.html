@@ -42,6 +42,12 @@
     recievePostCommentId = document.getElementById("recievePostCommentId");
     recievePostCommentId.value=postId
   }
+  function addCommentId2() {
+    giveId = document.getElementById("givePostCommentId2");
+    var postId = giveId.value;
+    recievePostCommentId = document.getElementById("recievePostCommentId");
+    recievePostCommentId.value=postId
+  }
 </script>
 <body>
   <div style="margin-left:1.5%;margin-right:1.5%;margin-top:0.5%;">
@@ -330,9 +336,9 @@
                     <p>{{ post.post_caption }}</p>
                     <!-- <p>Likes: {{ post.likes }}</p> -->
                     <p>Post date: {{ post.post_date }}</p>
-                    <input type="hidden" id="givePostCommentId" value="{{ post.id }}">
+                    <input type="hidden" id="givePostCommentId2" value="{{ post.id }}">
                     <input type="hidden" id="giveName" value="{{ posts.0.username }}">
-                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId(); giveUsername();" data-dismiss="modal">Add Comment</button>
+                    <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#addComment" onclick="addCommentId2(); giveUsername();" data-dismiss="modal">Add Comment</button>
                     <button type="button" class="btn btn-info btn-lg spcBot" data-toggle="modal" data-target="#viewComments{{post.id}}">Comments</button>
                   </div>
                 {% endfor %}
