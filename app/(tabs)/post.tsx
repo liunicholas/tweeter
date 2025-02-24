@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View } from 'react-native';
+// Import our new components
+import { PostInput } from '../../components/PostInput';
+import { PostList } from '../../components/PostList';
 
 interface Post {
   id: string;
@@ -87,27 +90,21 @@ export default function PostScreen() {
     setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
   }, []);
 
+  // Simplified return statement using our new components
   return (
     <View>
-      <TextInput
+      <PostInput
         value={newPostContent}
         onChangeText={setNewPostContent}
-        placeholder="Write your post..."
-      />
-      <Button
-        title={isPosting ? "Posting..." : "Create Post"}
-        onPress={createPost}
-        disabled={isPosting || !newPostContent.trim()}
+        onSubmit={createPost}
+        isPosting={isPosting}
       />
 
-      {posts.map(post => (
-        <View key={post.id}>
-          <Text>{post.content}</Text>
-          <Text>Likes: {post.likes}</Text>
-          <Button title="Like" onPress={() => likePost(post.id)} />
-          <Button title="Delete" onPress={() => deletePost(post.id)} />
-        </View>
-      ))}
+      <PostList
+        posts={posts}
+        onLikePost={likePost}
+        onDeletePost={deletePost}
+      />
     </View>
   );
 }
