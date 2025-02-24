@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-export default function NotFound() {
+export default function PostScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>404 - This screen does not exist.</Text>
+      <Text>This will be the Post tab.</Text>
     </View>
   );
 }
