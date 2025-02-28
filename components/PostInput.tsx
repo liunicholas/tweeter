@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Image, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 // Define props interface
@@ -59,10 +67,15 @@ export const PostInput: React.FC<PostInputProps> = ({
         <Button title="Take Photo" onPress={takePhoto} />
       </View>
       {previewImage && (
-        <Image
-          source={{ uri: previewImage }}
-          style={{ width: "100%", height: 200, borderRadius: 8 }}
-        />
+        <View style={styles.imageWrapper}>
+          <Image source={{ uri: previewImage }} style={styles.previewImage} />
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => setPreviewImage(undefined)}
+          >
+            <Text style={styles.deleteButtonText}>×</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -93,5 +106,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  imageWrapper: {
+    position: "relative",
+    marginTop: 10,
+  },
+  previewImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    lineHeight: 24,
+    textAlign: "center",
+    marginTop: -2,
   },
 });
