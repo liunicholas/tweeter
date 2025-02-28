@@ -8,6 +8,8 @@ interface PostInputProps {
   onChangeText: (text: string) => void;
   onSubmit: () => void;
   isPosting: boolean;
+  previewImage: string | undefined;
+  setPreviewImage: (image: string | undefined) => void;
 }
 
 // PostInput handles the creation of new posts
@@ -17,9 +19,9 @@ export const PostInput: React.FC<PostInputProps> = ({
   onChangeText,
   onSubmit,
   isPosting,
+  previewImage,
+  setPreviewImage,
 }) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
@@ -59,7 +61,7 @@ export const PostInput: React.FC<PostInputProps> = ({
       {previewImage && (
         <Image
           source={{ uri: previewImage }}
-          style={{ width: 100, height: 100 }}
+          style={{ width: "100%", height: 200, borderRadius: 8 }}
         />
       )}
     </View>
