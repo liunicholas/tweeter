@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 // Import our new components
 import { PostInput } from "../../components/PostInput";
 import { PostList } from "../../components/PostList";
@@ -61,7 +61,7 @@ export default function PostScreen() {
   }, [newPostContent]); // Function recreates if newPostContent changes
 
   return (
-    <View>
+    <View style={styles.container}>
       <PostInput
         value={newPostContent}
         onChangeText={setNewPostContent}
@@ -73,3 +73,13 @@ export default function PostScreen() {
     </View>
   );
 }
+
+// Styles for the PostScreen component
+const styles = StyleSheet.create({
+  // Container uses flex layout for proper spacing
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#f5f5f5",
+  },
+});

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, Button } from "react-native";
+import { View, TextInput, Button, StyleSheet } from "react-native";
 
 // Define props interface
 interface PostInputProps {
@@ -18,14 +18,16 @@ export const PostInput: React.FC<PostInputProps> = ({
   isPosting,
 }) => {
   return (
-    <View>
+    <View style={styles.container}>
       {/* Input field for post content */}
       <TextInput
+        style={styles.input}
         value={value}
         onChangeText={onChangeText}
         placeholder="Write your post..."
         // Disable input while posting
         editable={!isPosting}
+        multiline
       />
 
       {/* Submit button with loading state */}
@@ -38,3 +40,31 @@ export const PostInput: React.FC<PostInputProps> = ({
     </View>
   );
 };
+
+// Styles for the PostInput component
+const styles = StyleSheet.create({
+  // Container for the input section
+  container: {
+    marginBottom: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    padding: 10,
+    // Shadow properties for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    // Elevation for Android shadow
+    elevation: 3,
+  },
+  // Styling for the text input
+  input: {
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    borderRadius: 4,
+    padding: 12,
+    marginBottom: 10,
+    minHeight: 100,
+    textAlignVertical: "top",
+  },
+});
