@@ -33,11 +33,33 @@ export const PostInput: React.FC<PostInputProps> = ({
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
-      alert("Permission not granted");
+      alert("Camera permission not granted");
       return;
     }
 
-    const result = await ImagePicker.launchCameraAsync();
+    const result = await ImagePicker.launchCameraAsync({
+      quality: 0.8,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+    if (!result.canceled) {
+      setPreviewImage(result.assets[0].uri);
+    }
+  };
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Gallery permission not granted");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
     if (!result.canceled) {
       setPreviewImage(result.assets[0].uri);
     }
@@ -57,14 +79,17 @@ export const PostInput: React.FC<PostInputProps> = ({
       />
 
       {/* Submit button with loading state */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={styles.inputContainer}>
         <Button
           title={isPosting ? "Posting..." : "Create Post"}
           onPress={onSubmit}
           // Disable button when posting or when input is empty
           disabled={isPosting || !value.trim()}
         />
-        <Button title="Take Photo" onPress={takePhoto} />
+        <View style={styles.imageButtons}>
+          <Button title="Take Photo" onPress={takePhoto} />
+          <Button title="Choose from Gallery" onPress={pickImage} />
+        </View>
       </View>
       {previewImage && (
         <View style={styles.imageWrapper}>
@@ -106,6 +131,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  imageButtons: {
+    flexDirection: "row",
+    gap: 10,
   },
   imageWrapper: {
     position: "relative",
