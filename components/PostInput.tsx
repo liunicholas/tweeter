@@ -3,12 +3,12 @@ import {
   View,
   Image,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
   Text,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 // Define props interface
 interface PostInputProps {
@@ -80,25 +80,43 @@ export const PostInput: React.FC<PostInputProps> = ({
 
       {/* Submit button with loading state */}
       <View style={styles.inputContainer}>
-        <Button
-          title={isPosting ? "Posting..." : "Create Post"}
-          onPress={onSubmit}
-          // Disable button when posting or when input is empty
-          disabled={isPosting || !value.trim()}
-        />
-        <View style={styles.imageButtons}>
-          <Button title="Take Photo" onPress={takePhoto} />
-          <Button title="Choose from Gallery" onPress={pickImage} />
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[
+              styles.iconButton,
+              isPosting || !value.trim() ? styles.iconButtonDisabled : null,
+            ]}
+            onPress={onSubmit}
+            disabled={isPosting || !value.trim()}
+          >
+            <Ionicons
+              name="send"
+              size={24}
+              color={isPosting || !value.trim() ? "#999" : "#007AFF"}
+            />
+          </TouchableOpacity>
+          <View style={styles.imageButtons}>
+            <TouchableOpacity style={styles.iconButton} onPress={takePhoto}>
+              <Ionicons name="camera" size={24} color="#007AFF" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
+              <Ionicons name="images" size={24} color="#007AFF" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       {previewImage && (
         <View style={styles.imageWrapper}>
-          <Image source={{ uri: previewImage }} style={styles.previewImage} />
+          <Image source={{ uri: previewImage }} style={styles.image} />
           <TouchableOpacity
             style={styles.deleteButton}
             onPress={() => setPreviewImage(undefined)}
           >
-            <Text style={styles.deleteButtonText}>×</Text>
+            <Ionicons
+              name="close-circle"
+              size={24}
+              color="rgba(255, 255, 255, 0.9)"
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -108,49 +126,55 @@ export const PostInput: React.FC<PostInputProps> = ({
 
 // Styles for the PostInput component
 const styles = StyleSheet.create({
-  // Container for the input section
   container: {
     marginBottom: 20,
     backgroundColor: "#ffffff",
     borderRadius: 8,
-    padding: 10,
-    // Shadow properties for iOS
+    padding: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    // Elevation for Android shadow
     elevation: 3,
   },
-  // Styling for the text input
   input: {
     borderWidth: 1,
     borderColor: "#e0e0e0",
     borderRadius: 4,
     padding: 12,
-    marginBottom: 10,
+    marginBottom: 12,
     minHeight: 100,
     textAlignVertical: "top",
   },
   inputContainer: {
+    marginBottom: 12,
+  },
+  actionButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flexWrap: "wrap",
-    gap: 10,
   },
   imageButtons: {
     flexDirection: "row",
-    gap: 10,
+    gap: 8,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: "#f0f0f0",
+  },
+  iconButtonDisabled: {
+    opacity: 0.5,
   },
   imageWrapper: {
     position: "relative",
-    marginTop: 10,
+    marginTop: 4,
   },
-  previewImage: {
+  image: {
     width: "100%",
     height: 200,
     borderRadius: 8,
+    marginBottom: 12,
   },
   deleteButton: {
     position: "absolute",
@@ -158,16 +182,7 @@ const styles = StyleSheet.create({
     right: 8,
     width: 24,
     height: 24,
-    borderRadius: 12,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-  },
-  deleteButtonText: {
-    color: "#fff",
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: "center",
-    marginTop: -2,
   },
 });
