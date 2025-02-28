@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { View, StyleSheet } from "react-native";
 // Import our new components
-import { PostInput } from '../../components/PostInput';
-import { PostList } from '../../components/PostList';
+import { PostInput } from "../../components/PostInput";
+import { PostList } from "../../components/PostList";
 
-interface Post {
+export interface Post {
   id: string;
   content: string;
   likes: number;
   timestamp: Date;
+  imageUri?: string;
 }
 
 export default function PostScreen() {
@@ -17,8 +18,11 @@ export default function PostScreen() {
   // 1. The current state value
   // 2. A function to update that value
   const [posts, setPosts] = useState<Post[]>([]); // Managing an array of posts
-  const [newPostContent, setNewPostContent] = useState(''); // Managing form input
+  const [newPostContent, setNewPostContent] = useState(""); // Managing form input
   const [isPosting, setIsPosting] = useState(false); // Managing loading state
+  const [previewImage, setPreviewImage] = useState<string | undefined>(
+    undefined
+  );
 
   // useRef Hook Examples
   // useRef returns a mutable object that persists across re-renders
@@ -30,13 +34,13 @@ export default function PostScreen() {
   // This effect runs once when component mounts and cleanup runs on unmount
   useEffect(() => {
     isMounted.current = true;
-    console.log('PostScreen mounted');
-    
+    console.log("PostScreen mounted");
+
     // Cleanup function (optional)
     // Runs before component unmounts or before next effect execution
     return () => {
       isMounted.current = false;
-      console.log('PostScreen unmounted');
+      console.log("PostScreen unmounted");
     };
   }, []);
 
@@ -54,7 +58,7 @@ export default function PostScreen() {
     if (!newPostContent.trim()) return;
 
     setIsPosting(true); // Update loading state
-    
+
     // Simulate API call with setTimeout
     // In a real app, this would be an actual API request
     setTimeout(() => {
@@ -62,13 +66,15 @@ export default function PostScreen() {
         id: Date.now().toString(),
         content: newPostContent,
         likes: 0,
-        timestamp: new Date()
+        timestamp: new Date(),
+        imageUri: previewImage,
       };
 
       // Functional update pattern ensures we always have the latest state
-      setPosts(prevPosts => [...prevPosts, newPost]);
-      setNewPostContent('');
+      setPosts((prevPosts) => [...prevPosts, newPost]);
+      setNewPostContent("");
       setIsPosting(false);
+      setPreviewImage(undefined);
     }, 1000);
   }, [newPostContent]); // Function recreates if newPostContent changes
 
@@ -76,18 +82,16 @@ export default function PostScreen() {
   // These functions are memoized to prevent unnecessary re-renders
   const likePost = useCallback((postId: string) => {
     // Functional update pattern for modifying specific items in an array
-    setPosts(prevPosts =>
-      prevPosts.map(post =>
-        post.id === postId
-          ? { ...post, likes: post.likes + 1 }
-          : post
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post
       )
     );
   }, []);
 
   const deletePost = useCallback((postId: string) => {
     // Functional update pattern for filtering arrays
-    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   }, []);
 
   // Simplified return statement using our new components
@@ -98,13 +102,11 @@ export default function PostScreen() {
         onChangeText={setNewPostContent}
         onSubmit={createPost}
         isPosting={isPosting}
+        previewImage={previewImage}
+        setPreviewImage={setPreviewImage}
       />
 
-      <PostList
-        posts={posts}
-        onLikePost={likePost}
-        onDeletePost={deletePost}
-      />
+      <PostList posts={posts} onLikePost={likePost} onDeletePost={deletePost} />
     </View>
   );
 }
@@ -115,6 +117,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
 });

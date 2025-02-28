@@ -8,6 +8,8 @@ interface PostInputProps {
   onChangeText: (text: string) => void;
   onSubmit: () => void;
   isPosting: boolean;
+  previewImage: string | undefined;
+  setPreviewImage: (image: string | undefined) => void;
 }
 
 // PostInput handles the creation of new posts
@@ -17,9 +19,9 @@ export const PostInput: React.FC<PostInputProps> = ({
   onChangeText,
   onSubmit,
   isPosting,
+  previewImage,
+  setPreviewImage,
 }) => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
@@ -47,7 +49,7 @@ export const PostInput: React.FC<PostInputProps> = ({
       />
 
       {/* Submit button with loading state */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={styles.inputContainer}>
         <Button
           title={isPosting ? "Posting..." : "Create Post"}
           onPress={onSubmit}
@@ -57,10 +59,7 @@ export const PostInput: React.FC<PostInputProps> = ({
         <Button title="Take Photo" onPress={takePhoto} />
       </View>
       {previewImage && (
-        <Image
-          source={{ uri: previewImage }}
-          style={{ width: 100, height: 100 }}
-        />
+        <Image source={{ uri: previewImage }} style={styles.image} />
       )}
     </View>
   );
@@ -91,5 +90,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 12,
   },
 });

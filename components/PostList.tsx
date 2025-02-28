@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { PostCard } from './PostCard';
+import React from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { PostCard } from "./PostCard";
 
 // Define the Post type
 interface Post {
@@ -8,6 +8,7 @@ interface Post {
   content: string;
   likes: number;
   timestamp: Date;
+  imageUri?: string;
 }
 
 // Define props interface
@@ -27,7 +28,9 @@ export const PostList: React.FC<PostListProps> = ({
   if (posts.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>No posts yet. Be the first to post!</Text>
+        <Text style={styles.emptyText}>
+          No posts yet. Be the first to post!
+        </Text>
       </View>
     );
   }
@@ -40,6 +43,7 @@ export const PostList: React.FC<PostListProps> = ({
           key={post.id}
           content={post.content}
           likes={post.likes}
+          imageUri={post.imageUri}
           onLike={() => onLikePost(post.id)}
           onDelete={() => onDeletePost(post.id)}
         />
@@ -57,14 +61,14 @@ const styles = StyleSheet.create({
   // Styling for empty state container
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   // Styling for empty state text
   emptyText: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
 });
