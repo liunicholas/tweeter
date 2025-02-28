@@ -6,15 +6,17 @@ import { PostCard } from "./PostCard";
 interface Post {
   id: string;
   content: string;
+  likes: number;
 }
 
 // Define props interface
 interface PostListProps {
   posts: Post[];
+  onLikePost: (postId: string) => void;
 }
 
 // PostList renders the list of posts using the PostCard component
-export const PostList: React.FC<PostListProps> = ({ posts }) => {
+export const PostList: React.FC<PostListProps> = ({ posts, onLikePost }) => {
   // If there are no posts, show a message
   if (posts.length === 0) {
     return (
@@ -30,7 +32,12 @@ export const PostList: React.FC<PostListProps> = ({ posts }) => {
   return (
     <ScrollView style={styles.container}>
       {posts.map((post) => (
-        <PostCard key={post.id} content={post.content} />
+        <PostCard
+          key={post.id}
+          content={post.content}
+          likes={post.likes}
+          onLike={() => onLikePost(post.id)}
+        />
       ))}
     </ScrollView>
   );

@@ -7,6 +7,7 @@ import { PostList } from "../../components/PostList";
 interface Post {
   id: string;
   content: string;
+  likes: number;
 }
 
 export default function PostScreen() {
@@ -51,6 +52,7 @@ export default function PostScreen() {
       const newPost: Post = {
         id: Date.now().toString(),
         content: newPostContent,
+        likes: 0,
       };
 
       // Functional update pattern ensures we always have the latest state
@@ -59,6 +61,17 @@ export default function PostScreen() {
       setIsPosting(false);
     }, 1000);
   }, [newPostContent]); // Function recreates if newPostContent changes
+
+  // useCallback for post interactions
+  // These functions are memoized to prevent unnecessary re-renders
+  const likePost = useCallback((postId: string) => {
+    // Functional update pattern for modifying specific items in an array
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -69,7 +82,7 @@ export default function PostScreen() {
         isPosting={isPosting}
       />
 
-      <PostList posts={posts} />
+      <PostList posts={posts} onLikePost={likePost} />
     </View>
   );
 }
