@@ -18,6 +18,8 @@ export const PostInput: React.FC<PostInputProps> = ({
   onSubmit,
   isPosting,
 }) => {
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
@@ -27,7 +29,7 @@ export const PostInput: React.FC<PostInputProps> = ({
 
     const result = await ImagePicker.launchCameraAsync();
     if (!result.canceled) {
-      console.log(result.assets[0].uri);
+      setPreviewImage(result.assets[0].uri);
     }
   };
 
@@ -54,6 +56,12 @@ export const PostInput: React.FC<PostInputProps> = ({
         />
         <Button title="Take Photo" onPress={takePhoto} />
       </View>
+      {previewImage && (
+        <Image
+          source={{ uri: previewImage }}
+          style={{ width: 100, height: 100 }}
+        />
+      )}
     </View>
   );
 };
