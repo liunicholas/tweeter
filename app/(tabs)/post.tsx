@@ -73,6 +73,11 @@ export default function PostScreen() {
     );
   }, []);
 
+  const deletePost = useCallback((postId: string) => {
+    // Functional update pattern for filtering arrays
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  }, []);
+
   return (
     <View style={styles.container}>
       <PostInput
@@ -82,7 +87,7 @@ export default function PostScreen() {
         isPosting={isPosting}
       />
 
-      <PostList posts={posts} onLikePost={likePost} />
+      <PostList posts={posts} onLikePost={likePost} onDeletePost={deletePost} />
     </View>
   );
 }

@@ -6,6 +6,7 @@ interface PostCardProps {
   content: string;
   likes: number;
   onLike: () => void;
+  onDelete: () => void;
 }
 
 // PostCard is a presentational component that displays a single post
@@ -14,6 +15,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   content,
   likes,
   onLike,
+  onDelete,
 }) => {
   return (
     <View style={styles.card}>
@@ -26,6 +28,15 @@ export const PostCard: React.FC<PostCardProps> = ({
           onPress={onLike}
         >
           <Text style={styles.buttonText}>Like</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, styles.deleteButton]}
+          onPress={onDelete}
+        >
+          <Text style={[styles.buttonText, styles.deleteButtonText]}>
+            Delete
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -82,5 +93,15 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "600",
+  },
+  // Delete button specific styles
+  deleteButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ff5252",
+  },
+  // Delete button text specific style
+  deleteButtonText: {
+    color: "#ff5252",
   },
 });

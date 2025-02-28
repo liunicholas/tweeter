@@ -13,10 +13,15 @@ interface Post {
 interface PostListProps {
   posts: Post[];
   onLikePost: (postId: string) => void;
+  onDeletePost: (postId: string) => void;
 }
 
 // PostList renders the list of posts using the PostCard component
-export const PostList: React.FC<PostListProps> = ({ posts, onLikePost }) => {
+export const PostList: React.FC<PostListProps> = ({
+  posts,
+  onLikePost,
+  onDeletePost,
+}) => {
   // If there are no posts, show a message
   if (posts.length === 0) {
     return (
@@ -37,6 +42,7 @@ export const PostList: React.FC<PostListProps> = ({ posts, onLikePost }) => {
           content={post.content}
           likes={post.likes}
           onLike={() => onLikePost(post.id)}
+          onDelete={() => onDeletePost(post.id)}
         />
       ))}
     </ScrollView>
